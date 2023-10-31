@@ -1,0 +1,10 @@
+.btn-red {
+    background-color: red !important;
+    border-color: red !important;
+    transition: background-color 0.3s ease; 
+}
+
+.btn-red:hover {
+    background-color: #f84242 !important;  
+    border-color: #f84242 !important;
+}
