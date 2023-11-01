@@ -12,9 +12,14 @@ function Jogo() {
     const [direction, setDirection] = useState(null);
     const [gameOver, setGameOver] = useState(false);
     const [foodPosition, setFoodPosition] = useState(generateRandomPosition());
-    const [snake, setSnake] = useState([
-        { x: (window.innerWidth / 2) - 5, y: (window.innerHeight / 2) - 5 }
-    ]);
+    const middleX = Math.floor((window.innerWidth / 2) / DOT_SIZE) * DOT_SIZE - (DOT_SIZE * 2);
+const middleY = Math.floor((window.innerHeight / 2) / DOT_SIZE) * DOT_SIZE;
+
+const [snake, setSnake] = useState([
+    { x: middleX, y: middleY },
+    { x: middleX - DOT_SIZE, y: middleY }, 
+    { x: middleX - (DOT_SIZE * 2), y: middleY } 
+]);
 
     const [score, setScore] = useState(0);
 
@@ -172,7 +177,7 @@ function Jogo() {
                     <div style={{
                         width: '10px',
                         height: '10px',
-                        backgroundColor: 'blue', 
+                        backgroundColor: 'green', 
                         position: 'absolute',
                         top: `${foodPosition.y}px`,
                         left: `${foodPosition.x}px`,
