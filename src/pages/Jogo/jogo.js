@@ -13,7 +13,6 @@ function Jogo() {
     const containerRef = useRef(null);
     const [direction, setDirection] = useState(null);
     const [gameOver, setGameOver] = useState(false);
-    const [foodPosition, setFoodPosition] = useState(generateRandomPosition());
     const middleX = Math.floor(GAME_AREA_WIDTH / 2 / DOT_SIZE) * DOT_SIZE - DOT_SIZE;
     const middleY = Math.floor(GAME_AREA_HEIGHT / 2 / DOT_SIZE) * DOT_SIZE;
 
@@ -22,6 +21,8 @@ function Jogo() {
         { x: middleX - DOT_SIZE, y: middleY }, 
         { x: middleX - (DOT_SIZE * 2), y: middleY } 
     ]);
+
+    const [foodPosition, setFoodPosition] = useState(generateRandomPosition(snake));
 
     const [score, setScore] = useState(0);
 
@@ -83,7 +84,8 @@ function Jogo() {
             }
     
             newSnake.push(newTail);
-            setFoodPosition(generateRandomPosition());
+            setFoodPosition(generateRandomPosition(snake));
+
 
             setScore(score + 1);
         }
@@ -112,11 +114,19 @@ function Jogo() {
         }
     }
 
-    function generateRandomPosition() {
-        const x = Math.floor(Math.random() * (GAME_AREA_WIDTH / DOT_SIZE)) * DOT_SIZE;
-        const y = Math.floor(Math.random() * (GAME_AREA_HEIGHT / DOT_SIZE)) * DOT_SIZE;
-        return { x, y };
-    }    
+    function generateRandomPosition(snake) {
+        let position;
+        while (true) {
+            const x = Math.floor(Math.random() * (GAME_AREA_WIDTH / DOT_SIZE)) * DOT_SIZE;
+            const y = Math.floor(Math.random() * (GAME_AREA_HEIGHT / DOT_SIZE)) * DOT_SIZE;
+            position = { x, y };
+    
+            const isOnSnake = snake.some(segment => segment.x === position.x && segment.y === position.y);
+    
+            if (!isOnSnake) break;
+        }
+        return position;
+    }       
 
     function isColliding(a, b) {
         return (
