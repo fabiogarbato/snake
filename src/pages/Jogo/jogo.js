@@ -26,6 +26,7 @@ function Jogo() {
     const [foodPosition, setFoodPosition] = useState(generateRandomPosition(snake));
 
     const [score, setScore] = useState(0);
+    const [bestScore, setBestScore] = useState(0);
 
     function moveSnake() {
         if (!containerRef.current) return;
@@ -57,6 +58,11 @@ function Jogo() {
 
         if (head.x === 0 || head.y === 0 || head.x === CONTAINER_WIDTH - DOT_SIZE || head.y === CONTAINER_HEIGHT - DOT_SIZE || snakeCollidesWithItself(head, newSnake)) {
             setGameOver(true);
+
+            if (score > bestScore) {
+                localStorage.setItem('bestScore', score.toString());
+                setBestScore(score);
+            }
             return;
         }
 
@@ -163,22 +169,30 @@ function Jogo() {
           window.removeEventListener('keydown', handleFirstKeyPress);
         };
       }, []);
+
+    useEffect(() => {
+        const savedBestScore = localStorage.getItem('bestScore');
+        if (savedBestScore) {
+            setBestScore(Number(savedBestScore));
+        }
+    }, []);
+    
       
       return (
         <div style={{ height: '100vh', backgroundColor: 'black' }} className="d-flex justify-content-center align-items-center">
           <Container fluid className="position-absolute top-0 start-0 p-3">
             <Row>
               <Col style={{ color: 'red', fontFamily: 'Korataki, sans-serif' }}>
-                PONTUAÇÃO: {score}
+                    <div>PONTUAÇÃO: {score}</div>
+                    <div style={{ color: 'green', fontFamily: 'Korataki, sans-serif' }}>MELHOR PONTUAÇÃO: {bestScore}</div>
               </Col>
             </Row>
           </Container>
-      
           {gameOver ? (
             <Container style={{ width: '550px', height: '550px', backgroundColor: '#333' }} className="d-flex justify-content-center align-items-center">
               <Row className="d-flex justify-content-center align-items-center flex-column" style={{ width: '100%' }}>
                 <Col className="d-flex justify-content-center align-items-center" style={{ color: 'red', fontSize: '35px', fontFamily: 'Korataki, sans-serif' }}>
-                  Game Over
+                    Game Over
                 </Col>
                 <Col className="d-flex justify-content-center align-items-center flex-column">
                   <Link to="/jogo" className="btn btn-primary btn-lg btn-red mb-2" onClick={() => window.location.reload()}>
