@@ -14,10 +14,7 @@ const GAME_AREA_HEIGHT = 400;
 function Jogo() {
     const { theme } = useContext(ThemeContext);
     const fixedPositions = [
-        { x: DOT_SIZE, y: DOT_SIZE },
-        { x: 2 * DOT_SIZE, y: 2 * DOT_SIZE },
-        { x: 4 * DOT_SIZE, y: 4 * DOT_SIZE },
-        { x: 6 * DOT_SIZE, y: 6 * DOT_SIZE },
+        { x: 8 * DOT_SIZE, y: 8 * DOT_SIZE },
     ];
     
     let currentPositionIndex = 0;
