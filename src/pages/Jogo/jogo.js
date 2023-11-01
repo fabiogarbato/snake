@@ -13,13 +13,13 @@ function Jogo() {
     const [gameOver, setGameOver] = useState(false);
     const [foodPosition, setFoodPosition] = useState(generateRandomPosition());
     const middleX = Math.floor((window.innerWidth / 2) / DOT_SIZE) * DOT_SIZE - (DOT_SIZE * 2);
-const middleY = Math.floor((window.innerHeight / 2) / DOT_SIZE) * DOT_SIZE;
+    const middleY = Math.floor((window.innerHeight / 2) / DOT_SIZE) * DOT_SIZE;
 
-const [snake, setSnake] = useState([
-    { x: middleX, y: middleY },
-    { x: middleX - DOT_SIZE, y: middleY }, 
-    { x: middleX - (DOT_SIZE * 2), y: middleY } 
-]);
+    const [snake, setSnake] = useState([
+        { x: middleX, y: middleY },
+        { x: middleX - DOT_SIZE, y: middleY }, 
+        { x: middleX - (DOT_SIZE * 2), y: middleY } 
+    ]);
 
     const [score, setScore] = useState(0);
 
@@ -98,7 +98,9 @@ const [snake, setSnake] = useState([
                 if (direction !== 'up') setDirection('down');
                 break;
             case 'ArrowLeft':
-                if (direction !== 'right') setDirection('left');
+                if (snake.length === 1 || (snake.length > 1 && direction !== 'right')) {
+                    setDirection('left');
+                }
                 break;
             case 'ArrowRight':
                 if (direction !== 'left') setDirection('right');
@@ -126,11 +128,13 @@ const [snake, setSnake] = useState([
     }
 
     function snakeCollidesWithItself(head, snakeArray) {
+        // Começa o loop a partir do segundo segmento, pois o primeiro é a cabeça.
         for (let i = 1; i < snakeArray.length; i++) {
             if (isColliding(head, snakeArray[i])) return true;
         }
         return false;
     }
+    
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
@@ -141,6 +145,17 @@ const [snake, setSnake] = useState([
         };
     }, [snake, direction]);
     
+    useEffect(() => {
+        function handleFirstKeyPress(event) {
+          setDirection('right'); 
+          window.removeEventListener('keydown', handleFirstKeyPress);
+        }
+        window.addEventListener('keydown', handleFirstKeyPress);
+        return () => {
+          window.removeEventListener('keydown', handleFirstKeyPress);
+        };
+      }, []);
+      
     return (
         <div ref={containerRef} style={{ height: '100vh', backgroundColor: 'black' }} className="d-flex justify-content-center align-items-center">
             <Container fluid className="position-absolute top-0 start-0 p-3">
