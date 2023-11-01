@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col  } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import appleImage from '../../images/maca.png'; 
 import './jogo.css';
+import { ThemeContext } from '../Theme/theme';
 
 const DOT_SIZE = 10;
 const SPEED = 11;
@@ -11,6 +12,7 @@ const GAME_AREA_WIDTH = 600;
 const GAME_AREA_HEIGHT = 400;
 
 function Jogo() {
+    const { theme } = useContext(ThemeContext);
     const containerRef = useRef(null);
     const [direction, setDirection] = useState(null);
     const [gameOver, setGameOver] = useState(false);
@@ -179,7 +181,7 @@ function Jogo() {
     
       
       return (
-        <div style={{ height: '100vh', backgroundColor: 'black' }} className="d-flex justify-content-center align-items-center">
+        <div style={{ height: '100vh', backgroundColor: theme === 'dark' ? 'black' : 'white' }} className="d-flex justify-content-center align-items-center">
           <Container fluid className="position-absolute top-0 start-0 p-3">
             <Row>
               <Col style={{ color: 'red', fontFamily: 'Korataki, sans-serif' }}>
@@ -189,7 +191,7 @@ function Jogo() {
             </Row>
           </Container>
           {gameOver ? (
-            <Container style={{ width: '550px', height: '550px', backgroundColor: '#333' }} className="d-flex justify-content-center align-items-center">
+            <Container style={{ width: '550px', height: '550px', backgroundColor: theme === 'dark' ? '#333' : '#a39f9f' }} className="d-flex justify-content-center align-items-center">
               <Row className="d-flex justify-content-center align-items-center flex-column" style={{ width: '100%' }}>
                 <Col className="d-flex justify-content-center align-items-center" style={{ color: 'red', fontSize: '35px', fontFamily: 'Korataki, sans-serif' }}>
                     Game Over
@@ -205,7 +207,7 @@ function Jogo() {
               </Row>
             </Container>
           ) : (
-            <div className="game-area" ref={containerRef} style={{ width: '600px', height: '400px' }}>
+            <div className="game-area" ref={containerRef} style={{ width: '600px', height: '400px', backgroundColor: theme === 'dark' ? '#333' : '#a39f9f' }}>
               {snake.map((segment, index) => (
                 <div key={index} style={{
                     width: `${DOT_SIZE}px`,
