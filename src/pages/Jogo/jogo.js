@@ -228,7 +228,7 @@ function Jogo() {
     }, [gameSize]);
     
       return (
-        <div style={{ height: '100vh', backgroundColor: theme === 'dark' ? 'black' : 'white' }} className="d-flex justify-content-center align-items-center">
+        <div style={{ height: '100vh', backgroundColor: theme === 'dark' ? 'black' : 'white', position: 'relative' }} className="d-flex justify-content-center align-items-center">
           <Container fluid className="position-absolute top-0 start-0 p-3">
                 <Row>
                     <Col style={{ color: 'red', fontFamily: 'Korataki, sans-serif' }}>
@@ -243,7 +243,7 @@ function Jogo() {
                 </Row>
             </Container>
           {gameOver ? (
-            <Container style={{ width: '550px', height: '550px', backgroundColor: theme === 'dark' ? '#333' : '#a39f9f' }} className="d-flex justify-content-center align-items-center">
+            <Container style={{ width: '350px', height: '350px', backgroundColor: theme === 'dark' ? '#333' : '#a39f9f' }} className="d-flex justify-content-center align-items-center">
               <Row className="d-flex justify-content-center align-items-center flex-column" style={{ width: '100%' }}>
                 <Col className="d-flex justify-content-center align-items-center" style={{ color: 'red', fontSize: '35px', fontFamily: 'Korataki, sans-serif' }}>
                     Game Over
@@ -251,9 +251,6 @@ function Jogo() {
                 <Col className="d-flex justify-content-center align-items-center flex-column">
                   <Link to="/jogo" className="btn btn-primary btn-lg btn-red mb-2" onClick={() => window.location.reload()}>
                     Reiniciar
-                  </Link>
-                  <Link to="/" className="btn btn-primary btn-lg btn-red">
-                    Menu
                   </Link>
                 </Col>
               </Row>
@@ -271,7 +268,6 @@ function Jogo() {
                     top: `${segment.y}px`,
                     left: `${segment.x}px`,
                   }} />
-  
               ))}
               <div style={{
                 width: `${DOT_SIZE * 1.3}px`,
@@ -285,6 +281,9 @@ function Jogo() {
               }} />
             </div>
           )}
+        <Link to="/" className="btn btn-primary btn-lg btn-red" style={{ position: 'absolute', bottom: '10px', left: '50%', transform: 'translateX(-50%)' }}>
+            Menu
+        </Link>
         </div>
       ); 
       
