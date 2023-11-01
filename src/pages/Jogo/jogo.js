@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Container, Row, Col  } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import appleImage from '../../images/maca.png'; 
 import './jogo.css';
 
 const DOT_SIZE = 10;
@@ -86,7 +87,6 @@ function Jogo() {
             newSnake.push(newTail);
             setFoodPosition(generateRandomPosition(snake));
 
-
             setScore(score + 1);
         }
     
@@ -143,7 +143,6 @@ function Jogo() {
         }
         return false;
     }
-    
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeyDown);
@@ -195,18 +194,23 @@ function Jogo() {
             <div className="game-area" ref={containerRef} style={{ width: '600px', height: '400px' }}>
               {snake.map((segment, index) => (
                 <div key={index} style={{
-                  width: `${DOT_SIZE}px`,
-                  height: `${DOT_SIZE}px`,
-                  backgroundColor: 'red',
-                  position: 'absolute',
-                  top: `${segment.y}px`,
-                  left: `${segment.x}px`,
-                }} />
+                    width: `${DOT_SIZE}px`,
+                    height: `${DOT_SIZE}px`,
+                    backgroundImage: 'linear-gradient(135deg, #f06, #9f6)',
+                    borderRadius: '50%', 
+                    boxShadow: '0 0 5px rgba(0, 0, 0, 0.2)', 
+                    position: 'absolute',
+                    top: `${segment.y}px`,
+                    left: `${segment.x}px`,
+                  }} />
+  
               ))}
               <div style={{
-                width: `${DOT_SIZE}px`,
-                height: `${DOT_SIZE}px`,
-                backgroundColor: 'green',
+                width: `${DOT_SIZE * 1.3}px`,
+                height: `${DOT_SIZE * 1.3}px`,                
+                backgroundImage: `url(${appleImage})`,
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
                 position: 'absolute',
                 top: `${foodPosition.y}px`,
                 left: `${foodPosition.x}px`,
