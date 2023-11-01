@@ -5,15 +5,17 @@ import { Link } from 'react-router-dom';
 import './jogo.css';
 
 const DOT_SIZE = 10;
-const SPEED = 16;
+const SPEED = 11;
+const GAME_AREA_WIDTH = 600;
+const GAME_AREA_HEIGHT = 400;
 
 function Jogo() {
     const containerRef = useRef(null);
     const [direction, setDirection] = useState(null);
     const [gameOver, setGameOver] = useState(false);
     const [foodPosition, setFoodPosition] = useState(generateRandomPosition());
-    const middleX = Math.floor((window.innerWidth / 2) / DOT_SIZE) * DOT_SIZE - (DOT_SIZE * 2);
-    const middleY = Math.floor((window.innerHeight / 2) / DOT_SIZE) * DOT_SIZE;
+    const middleX = Math.floor(GAME_AREA_WIDTH / 2 / DOT_SIZE) * DOT_SIZE - DOT_SIZE;
+    const middleY = Math.floor(GAME_AREA_HEIGHT / 2 / DOT_SIZE) * DOT_SIZE;
 
     const [snake, setSnake] = useState([
         { x: middleX, y: middleY },
@@ -111,12 +113,10 @@ function Jogo() {
     }
 
     function generateRandomPosition() {
-        const CONTAINER_WIDTH = containerRef.current ? containerRef.current.clientWidth : window.innerWidth;
-        const CONTAINER_HEIGHT = containerRef.current ? containerRef.current.clientHeight : window.innerHeight;
-        const x = Math.floor(Math.random() * (CONTAINER_WIDTH - DOT_SIZE) / DOT_SIZE) * DOT_SIZE;
-        const y = Math.floor(Math.random() * (CONTAINER_HEIGHT - DOT_SIZE) / DOT_SIZE) * DOT_SIZE;
+        const x = Math.floor(Math.random() * (GAME_AREA_WIDTH / DOT_SIZE)) * DOT_SIZE;
+        const y = Math.floor(Math.random() * (GAME_AREA_HEIGHT / DOT_SIZE)) * DOT_SIZE;
         return { x, y };
-    }
+    }    
 
     function isColliding(a, b) {
         return (
@@ -128,7 +128,6 @@ function Jogo() {
     }
 
     function snakeCollidesWithItself(head, snakeArray) {
-        // Começa o loop a partir do segundo segmento, pois o primeiro é a cabeça.
         for (let i = 1; i < snakeArray.length; i++) {
             if (isColliding(head, snakeArray[i])) return true;
         }
@@ -156,51 +155,57 @@ function Jogo() {
         };
       }, []);
       
-    return (
-        <div ref={containerRef} style={{ height: '100vh', backgroundColor: 'black' }} className="d-flex justify-content-center align-items-center">
-            <Container fluid className="position-absolute top-0 start-0 p-3">
-                <Row>
-                    <Col style={{ color: 'red', fontFamily: 'Korataki, sans-serif' }}>
-                        PONTUAÇÃO: {score}
-                    </Col>
-                </Row>
+      return (
+        <div style={{ height: '100vh', backgroundColor: 'black' }} className="d-flex justify-content-center align-items-center">
+          <Container fluid className="position-absolute top-0 start-0 p-3">
+            <Row>
+              <Col style={{ color: 'red', fontFamily: 'Korataki, sans-serif' }}>
+                PONTUAÇÃO: {score}
+              </Col>
+            </Row>
+          </Container>
+      
+          {gameOver ? (
+            <Container style={{ width: '550px', height: '550px', backgroundColor: '#333' }} className="d-flex justify-content-center align-items-center">
+              <Row className="d-flex justify-content-center align-items-center flex-column" style={{ width: '100%' }}>
+                <Col className="d-flex justify-content-center align-items-center" style={{ color: 'red', fontSize: '35px', fontFamily: 'Korataki, sans-serif' }}>
+                  Game Over
+                </Col>
+                <Col className="d-flex justify-content-center align-items-center flex-column">
+                  <Link to="/jogo" className="btn btn-primary btn-lg btn-red mb-2" onClick={() => window.location.reload()}>
+                    Reiniciar
+                  </Link>
+                  <Link to="/" className="btn btn-primary btn-lg btn-red">
+                    Menu
+                  </Link>
+                </Col>
+              </Row>
             </Container>
-            {gameOver ? (
-                <Container style={{ width: '550px', height: '550px', backgroundColor: '#333' }} className="d-flex justify-content-center align-items-center">
-                    <Row className="d-flex justify-content-center align-items-center flex-column" style={{ width: '100%' }}>
-                        <Col className="d-flex justify-content-center align-items-center" style={{ color: 'red', fontSize: '35px', fontFamily: 'Korataki, sans-serif' }}>
-                            Game Over
-                        </Col>
-                        <Col className="d-flex justify-content-center align-items-center flex-column">
-                            <Link to="/jogo" className="btn btn-primary btn-lg btn-red mb-2" onClick={() => window.location.reload()}>Reiniciar</Link>
-                            <Link to="/" className="btn btn-primary btn-lg btn-red">Menu</Link>
-                        </Col>
-                    </Row>
-                </Container>
-            ) : (
-                <>
-                    {snake.map((segment, index) => (
-                        <div key={index} style={{
-                            width: '10px',
-                            height: '10px',
-                            backgroundColor: 'red',
-                            position: 'absolute',
-                            top: `${segment.y}px`,
-                            left: `${segment.x}px`,
-                        }} />
-                    ))}
-                    <div style={{
-                        width: '10px',
-                        height: '10px',
-                        backgroundColor: 'green', 
-                        position: 'absolute',
-                        top: `${foodPosition.y}px`,
-                        left: `${foodPosition.x}px`,
-                    }} />
-                </>
-            )}
+          ) : (
+            <div className="game-area" ref={containerRef} style={{ width: '600px', height: '400px' }}>
+              {snake.map((segment, index) => (
+                <div key={index} style={{
+                  width: `${DOT_SIZE}px`,
+                  height: `${DOT_SIZE}px`,
+                  backgroundColor: 'red',
+                  position: 'absolute',
+                  top: `${segment.y}px`,
+                  left: `${segment.x}px`,
+                }} />
+              ))}
+              <div style={{
+                width: `${DOT_SIZE}px`,
+                height: `${DOT_SIZE}px`,
+                backgroundColor: 'green',
+                position: 'absolute',
+                top: `${foodPosition.y}px`,
+                left: `${foodPosition.x}px`,
+              }} />
+            </div>
+          )}
         </div>
-    );    
+      ); 
+      
 }
 
 export default Jogo;
