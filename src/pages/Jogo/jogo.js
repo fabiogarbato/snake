@@ -13,18 +13,20 @@ const GAME_AREA_HEIGHT = 400;
 
 function Jogo() {
     const { theme } = useContext(ThemeContext);
+    const fixedPositions = [
+        { x: DOT_SIZE, y: DOT_SIZE },
+        { x: 2 * DOT_SIZE, y: 2 * DOT_SIZE },
+        { x: 4 * DOT_SIZE, y: 4 * DOT_SIZE },
+        { x: 6 * DOT_SIZE, y: 6 * DOT_SIZE },
+    ];
+    
+    let currentPositionIndex = 0;
+    const [gameSize, setGameSize] = useState({width: GAME_AREA_WIDTH, height: GAME_AREA_HEIGHT});
     const containerRef = useRef(null);
     const [direction, setDirection] = useState(null);
     const [gameOver, setGameOver] = useState(false);
-    const middleX = Math.floor(GAME_AREA_WIDTH / 2 / DOT_SIZE) * DOT_SIZE - DOT_SIZE;
-    const middleY = Math.floor(GAME_AREA_HEIGHT / 2 / DOT_SIZE) * DOT_SIZE;
-
-    const [snake, setSnake] = useState([
-        { x: middleX, y: middleY },
-        { x: middleX - DOT_SIZE, y: middleY }, 
-        { x: middleX - (DOT_SIZE * 2), y: middleY } 
-    ]);
-
+    const [snake, setSnake] = useState([]);
+    const [initialFood, setInitialFood] = useState(true);
     const [foodPosition, setFoodPosition] = useState(generateRandomPosition(snake));
 
     const [score, setScore] = useState(0);
@@ -122,19 +124,35 @@ function Jogo() {
         }
     }
 
+    function getNextFixedPosition() {
+        const position = fixedPositions[currentPositionIndex];
+        currentPositionIndex = (currentPositionIndex + 1) % fixedPositions.length;
+        return position;
+    }
+
     function generateRandomPosition(snake) {
         let position;
-        while (true) {
-            const x = Math.floor(Math.random() * (GAME_AREA_WIDTH / DOT_SIZE)) * DOT_SIZE;
-            const y = Math.floor(Math.random() * (GAME_AREA_HEIGHT / DOT_SIZE)) * DOT_SIZE;
+        let attempts = 0;
+        const maxAttempts = (gameSize.width / DOT_SIZE) * (gameSize.height / DOT_SIZE);
+
+        if (initialFood) {
+            setInitialFood(false);
+            return getNextFixedPosition();  
+          }
+          
+        while (attempts < maxAttempts) {
+            const x = Math.floor(Math.random() * (gameSize.width / DOT_SIZE)) * DOT_SIZE;
+            const y = Math.floor(Math.random() * (gameSize.height / DOT_SIZE)) * DOT_SIZE;
             position = { x, y };
     
             const isOnSnake = snake.some(segment => segment.x === position.x && segment.y === position.y);
     
             if (!isOnSnake) break;
+    
+            attempts++;
         }
         return position;
-    }       
+    }     
 
     function isColliding(a, b) {
         return (
@@ -178,8 +196,40 @@ function Jogo() {
             setBestScore(Number(savedBestScore));
         }
     }, []);
+
+    useEffect(() => {
+        const savedOption = JSON.parse(localStorage.getItem('selectedOption'));
+        const savedDifficulty = savedOption ? savedOption.value : null;
+        if (savedDifficulty) {
+            switch(savedDifficulty) {
+                case 'facil':
+                    setGameSize({width: 600, height: 400});
+                    break;
+                case 'medio':
+                    setGameSize({width: 500, height: 350});
+                    break;
+                case 'dificil':
+                    setGameSize({width: 400, height: 300});
+                    break;
+                default:
+                    setGameSize({width: GAME_AREA_WIDTH, height: GAME_AREA_HEIGHT});
+                    break;
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        const middleX = Math.floor(gameSize.width / 2 / DOT_SIZE) * DOT_SIZE - DOT_SIZE;
+        const middleY = Math.floor(gameSize.height / 2 / DOT_SIZE) * DOT_SIZE;
     
-      
+        setSnake([
+            { x: middleX, y: middleY },
+            { x: middleX - DOT_SIZE, y: middleY },
+            { x: middleX - (DOT_SIZE * 2), y: middleY }
+        ]);
+    
+    }, [gameSize]);
+    
       return (
         <div style={{ height: '100vh', backgroundColor: theme === 'dark' ? 'black' : 'white' }} className="d-flex justify-content-center align-items-center">
           <Container fluid className="position-absolute top-0 start-0 p-3">
@@ -212,7 +262,7 @@ function Jogo() {
               </Row>
             </Container>
           ) : (
-            <div className="game-area" ref={containerRef} style={{ width: '600px', height: '400px', backgroundColor: theme === 'dark' ? '#333' : '#a39f9f' }}>
+            <div className="game-area" ref={containerRef} style={{ width: `${gameSize.width}px`, height: `${gameSize.height}px`, backgroundColor: theme === 'dark' ? '#333' : '#a39f9f' }}>
               {snake.map((segment, index) => (
                 <div key={index} style={{
                     width: `${DOT_SIZE}px`,
