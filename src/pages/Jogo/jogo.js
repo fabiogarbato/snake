@@ -183,13 +183,18 @@ function Jogo() {
       return (
         <div style={{ height: '100vh', backgroundColor: theme === 'dark' ? 'black' : 'white' }} className="d-flex justify-content-center align-items-center">
           <Container fluid className="position-absolute top-0 start-0 p-3">
-            <Row>
-              <Col style={{ color: 'red', fontFamily: 'Korataki, sans-serif' }}>
-                    <div>PONTUAÇÃO: {score}</div>
-                    <div style={{ color: 'green', fontFamily: 'Korataki, sans-serif' }}>MELHOR PONTUAÇÃO: {bestScore}</div>
-              </Col>
-            </Row>
-          </Container>
+                <Row>
+                    <Col style={{ color: 'red', fontFamily: 'Korataki, sans-serif' }}>
+                        <div>PONTUAÇÃO: {score}</div>
+                        <div style={{ color: 'green', fontFamily: 'Korataki, sans-serif' }}>MELHOR PONTUAÇÃO: {bestScore}</div>
+                    </Col>
+                    <Col className="d-flex align-items-center justify-content-end">
+                        <Link to="/options" className="btn btn-primary btn-lg btn-red">
+                            Opções
+                        </Link>
+                    </Col>
+                </Row>
+            </Container>
           {gameOver ? (
             <Container style={{ width: '550px', height: '550px', backgroundColor: theme === 'dark' ? '#333' : '#a39f9f' }} className="d-flex justify-content-center align-items-center">
               <Row className="d-flex justify-content-center align-items-center flex-column" style={{ width: '100%' }}>
