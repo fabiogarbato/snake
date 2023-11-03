@@ -199,7 +199,7 @@ function Jogo() {
     useEffect(() => {
         const savedOption = JSON.parse(localStorage.getItem('selectedOption'));
         const savedDifficulty = savedOption ? savedOption.value : null;
-        let label = 'Normal'; // ou algum valor padrão
+        let label = 'Normal'; 
         if (savedDifficulty) {
             switch(savedDifficulty) {
                 case 'facil':
