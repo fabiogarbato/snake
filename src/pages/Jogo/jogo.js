@@ -251,7 +251,8 @@ function Jogo() {
                             transform: 'translateX(-50%)',
                             color: difficultyLabel === 'Fácil' ? 'green' :
                                     difficultyLabel === 'Médio' ? 'orange' :
-                                    difficultyLabel === 'Difícil' ? 'red' : 'inherit' 
+                                    difficultyLabel === 'Difícil' ? 'red' : 'inherit',
+                            fontFamily: 'Korataki, sans-serif'
                             }}
                         >
                             Dificuldade: {difficultyLabel}
