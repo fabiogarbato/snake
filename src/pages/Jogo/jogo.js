@@ -194,25 +194,32 @@ function Jogo() {
         }
     }, []);
 
+    const [difficultyLabel, setDifficultyLabel] = useState('');
+
     useEffect(() => {
         const savedOption = JSON.parse(localStorage.getItem('selectedOption'));
         const savedDifficulty = savedOption ? savedOption.value : null;
+        let label = 'Normal'; // ou algum valor padrão
         if (savedDifficulty) {
             switch(savedDifficulty) {
                 case 'facil':
                     setGameSize({width: 600, height: 400});
+                    label = 'Fácil';
                     break;
                 case 'medio':
                     setGameSize({width: 500, height: 350});
+                    label = 'Médio';
                     break;
                 case 'dificil':
                     setGameSize({width: 400, height: 300});
+                    label = 'Difícil';
                     break;
                 default:
                     setGameSize({width: GAME_AREA_WIDTH, height: GAME_AREA_HEIGHT});
                     break;
             }
         }
+        setDifficultyLabel(label);
     }, []);
 
     useEffect(() => {
@@ -236,12 +243,28 @@ function Jogo() {
                         <div style={{ color: 'green', fontFamily: 'Korataki, sans-serif' }}>MELHOR PONTUAÇÃO: {bestScore}</div>
                     </Col>
                     <Col className="d-flex align-items-center justify-content-end">
+                        <h2
+                            style={{
+                            position: 'absolute',
+                            bottom: '10px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            color: difficultyLabel === 'Fácil' ? 'green' :
+                                    difficultyLabel === 'Médio' ? 'orange' :
+                                    difficultyLabel === 'Difícil' ? 'red' : 'inherit' 
+                            }}
+                        >
+                            Dificuldade: {difficultyLabel}
+                        </h2>
+                    </Col>
+                    <Col className="d-flex align-items-center justify-content-end">
                         <Link to="/options" className="btn btn-primary btn-lg btn-red">
                             Opções
                         </Link>
                     </Col>
                 </Row>
             </Container>
+            
           {gameOver ? (
             <Container style={{ width: '350px', height: '350px', backgroundColor: theme === 'dark' ? '#333' : '#a39f9f' }} className="d-flex justify-content-center align-items-center">
               <Row className="d-flex justify-content-center align-items-center flex-column" style={{ width: '100%' }}>

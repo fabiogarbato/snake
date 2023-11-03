@@ -101,7 +101,7 @@ const handleChange = (option) => {
                                         }),
                                         menu: (provided) => ({
                                             ...provided,
-                                            backgroundColor: '#808080',  
+                                            backgroundColor: theme === 'dark' ? '#808080' : '#c7c6c6'  
                                         }),
                                     }}
                                 />
