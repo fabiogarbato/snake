@@ -277,32 +277,33 @@ function Jogo() {
                         <div>PONTUAÇÃO: {score}</div>
                         <div style={{ color: 'green', fontFamily: 'Korataki, sans-serif' }}>MELHOR PONTUAÇÃO: {bestScore}</div>
                     </Col>
-                    <Col className="d-flex align-items-center justify-content-end">
-                        <div
-                            style={{
-                            position: 'absolute',
-                            top: '30%',
-                            left: '50%',
-                            transform: 'translateX(-50%)',
-                            textAlign: 'center', 
-                            fontFamily: 'Korataki, sans-serif'
-                            }}
-                        >
+                    <Col className="d-flex align-items-center justify-content-center">
+                        <Row className="justify-content-left">
+                            <Col xs={12} sm={10} md={8} lg={6} className="text-center">
                             <h2
                                 style={{
                                 color: difficultyLabel === 'Fácil' ? 'green' :
-                                        difficultyLabel === 'Médio' ? 'orange' :
-                                        difficultyLabel === 'Difícil' ? 'red' : 'inherit',
+                                difficultyLabel === 'Médio' ? 'orange' :
+                                difficultyLabel === 'Difícil' ? 'red' : 'inherit',
+                                fontFamily: 'Korataki, sans-serif',
+                                whiteSpace: 'nowrap'
                                 }}
                             >
                                 Dificuldade: {difficultyLabel}
                             </h2>
-                            <div style={{
+                            <h2
+                                style={{
                                 color:  speedLabel === 'Lento' ? 'Blue' :
-                                        speedLabel === 'Médio' ? 'orange' :
-                                        speedLabel === 'Rápido' ? 'red' : 'inherit',
-                                }}>Velocidade: {speedLabel} </div> 
-                        </div>
+                                speedLabel === 'Médio' ? 'orange' :
+                                speedLabel === 'Rápido' ? 'red' : 'inherit',
+                                fontFamily: 'Korataki, sans-serif',
+                                whiteSpace: 'nowrap'
+                                }}
+                            >
+                                Velocidade: {speedLabel}
+                            </h2>
+                            </Col>
+                        </Row>
                     </Col>
                     <Col className="d-flex align-items-center justify-content-end">
                         <Link to="/options" className="btn btn-primary btn-lg btn-red">
