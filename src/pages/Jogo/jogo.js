@@ -7,7 +7,10 @@ import './jogo.css';
 import { ThemeContext } from '../Theme/theme';
 
 const DOT_SIZE = 10;
-const SPEED = 11;
+const SLOW_SPEED = 11;
+const MEDIUM_SPEED = 13;
+const FAST_SPEED = 17; 
+const DEFAULT_SPEED = 11;
 const GAME_AREA_WIDTH = 600;
 const GAME_AREA_HEIGHT = 400;
 
@@ -39,16 +42,16 @@ function Jogo() {
 
         switch (direction) {
             case 'up':
-                head.y = Math.max(0, head.y - SPEED);
+                head.y = Math.max(0, head.y - gameSpeed);
                 break;
             case 'down':
-                head.y = Math.min(CONTAINER_HEIGHT - DOT_SIZE, head.y + SPEED);
+                head.y = Math.min(CONTAINER_HEIGHT - DOT_SIZE, head.y + gameSpeed);
                 break;
             case 'left':
-                head.x = Math.max(0, head.x - SPEED);
+                head.x = Math.max(0, head.x - gameSpeed);
                 break;
             case 'right':
-                head.x = Math.min(CONTAINER_WIDTH - DOT_SIZE, head.x + SPEED);
+                head.x = Math.min(CONTAINER_WIDTH - DOT_SIZE, head.x + gameSpeed);
                 break;
             default:
                 return;
@@ -222,6 +225,38 @@ function Jogo() {
         setDifficultyLabel(label);
     }, []);
 
+    const [gameSpeed, setGameSpeed] = useState(DEFAULT_SPEED); 
+    const [speedLabel, setSpeedLabel] = useState('Lento'); 
+
+    useEffect(() => {
+        const savedOption = JSON.parse(localStorage.getItem('selectedSpeed'));
+        const savedSpeed = savedOption ? savedOption.value : null;
+        
+        let speedLabel = 'Lento'; 
+        if (savedSpeed) {
+            switch(savedSpeed) {
+                case 'lento':
+                    setGameSpeed(SLOW_SPEED);
+                    speedLabel = 'Lento';
+                    break;
+                case 'medio':
+                    setGameSpeed(MEDIUM_SPEED);
+                    speedLabel = 'Médio';
+                    break;
+                case 'rapido':
+                    setGameSpeed(FAST_SPEED);
+                    speedLabel = 'Rápido';
+                    break;
+                default:
+                   
+                    setGameSpeed(DEFAULT_SPEED);
+                    
+                    break;
+            }
+        }
+        setSpeedLabel(speedLabel);
+    }, []);    
+
     useEffect(() => {
         const middleX = Math.floor(gameSize.width / 2 / DOT_SIZE) * DOT_SIZE - DOT_SIZE;
         const middleY = Math.floor(gameSize.height / 2 / DOT_SIZE) * DOT_SIZE;
@@ -243,20 +278,31 @@ function Jogo() {
                         <div style={{ color: 'green', fontFamily: 'Korataki, sans-serif' }}>MELHOR PONTUAÇÃO: {bestScore}</div>
                     </Col>
                     <Col className="d-flex align-items-center justify-content-end">
-                        <h2
+                        <div
                             style={{
                             position: 'absolute',
-                            bottom: '10px',
+                            top: '30%',
                             left: '50%',
                             transform: 'translateX(-50%)',
-                            color: difficultyLabel === 'Fácil' ? 'green' :
-                                    difficultyLabel === 'Médio' ? 'orange' :
-                                    difficultyLabel === 'Difícil' ? 'red' : 'inherit',
+                            textAlign: 'center', 
                             fontFamily: 'Korataki, sans-serif'
                             }}
                         >
-                            Dificuldade: {difficultyLabel}
-                        </h2>
+                            <h2
+                                style={{
+                                color: difficultyLabel === 'Fácil' ? 'green' :
+                                        difficultyLabel === 'Médio' ? 'orange' :
+                                        difficultyLabel === 'Difícil' ? 'red' : 'inherit',
+                                }}
+                            >
+                                Dificuldade: {difficultyLabel}
+                            </h2>
+                            <div style={{
+                                color:  speedLabel === 'Lento' ? 'Blue' :
+                                        speedLabel === 'Médio' ? 'orange' :
+                                        speedLabel === 'Rápido' ? 'red' : 'inherit',
+                                }}>Velocidade: {speedLabel} </div> 
+                        </div>
                     </Col>
                     <Col className="d-flex align-items-center justify-content-end">
                         <Link to="/options" className="btn btn-primary btn-lg btn-red">

@@ -12,9 +12,32 @@ const options = [
     { value: 'dificil', label: 'Dificil' },
   ];
 
+const speedOptions = [
+    { value: 'lento', label: 'Lento' },
+    { value: 'medio', label: 'Médio' },
+    { value: 'rapido', label: 'Rápido' },
+];
+
 function Options() {
   const { theme, toggleTheme } = useContext(ThemeContext); 
-  const [selectedValue, setSelectedValue] = useState();
+  const [selectedValue, setSelectedValue] = useState({ value: 'facil', label: 'Fácil' });
+
+  const [selectedSpeed, setSelectedSpeed] = useState(() => {
+    const savedSpeed = localStorage.getItem('selectedSpeed');
+    return savedSpeed ? JSON.parse(savedSpeed) : { value: 'lento', label: 'Lento' };
+  });
+  
+  const handleSpeedChange = (option) => {
+    setSelectedSpeed(option);
+    localStorage.setItem('selectedSpeed', JSON.stringify(option));
+  };  
+
+  useEffect(() => {
+    const savedSpeed = localStorage.getItem('selectedSpeed');
+    if (savedSpeed) {
+      setSelectedSpeed(JSON.parse(savedSpeed));
+    }
+  }, []);  
 
   useEffect(() => {
     const savedValue = localStorage.getItem('selectedOption');
@@ -23,10 +46,10 @@ function Options() {
     }
 }, []); 
 
-const handleChange = (option) => {
-    setSelectedValue(option);
-    localStorage.setItem('selectedOption', JSON.stringify(option));
-};
+    const handleChange = (option) => {
+        setSelectedValue(option);
+        localStorage.setItem('selectedOption', JSON.stringify(option));
+    };
 
   return (
         <div style={{ height: '100vh', backgroundColor: theme === 'dark' ? 'black' : 'white' }} className="d-flex justify-content-center align-items-center">
@@ -97,6 +120,66 @@ const handleChange = (option) => {
                                                 state.data.value === 'facil' ? '#006400' :
                                                 state.data.value === 'medio' ? '#FF4500' :
                                                 state.data.value === 'dificil' ? 'Red' : null
+                                            ) : null
+                                        }),
+                                        menu: (provided) => ({
+                                            ...provided,
+                                            backgroundColor: theme === 'dark' ? '#808080' : '#c7c6c6'  
+                                        }),
+                                    }}
+                                />
+                                <Form.Label style={{ color: 'red', fontFamily: 'Korataki, sans-serif' }}>Velocidade</Form.Label>
+                                <Select
+                                    value={selectedSpeed} 
+                                    onChange={handleSpeedChange} 
+                                    options={speedOptions}
+                                    styles={{
+                                        control: (provided) => {
+                                            let backgroundColor;
+                                            
+                                            if (selectedSpeed && selectedSpeed.value === 'lento') {
+                                                backgroundColor = '#ADD8E6';
+                                            } else if (selectedSpeed && selectedSpeed.value === 'medio') {
+                                                backgroundColor = '#FFFF99';
+                                            } else if (selectedSpeed && selectedSpeed.value === 'rapido') {
+                                                backgroundColor = '#FFA07A';
+                                            } else {
+                                                backgroundColor = '#808080'; 
+                                            }
+                                            
+                                            return {
+                                                ...provided,
+                                                backgroundColor
+                                            };
+                                        },
+                                        singleValue: (provided, state) => {
+                                            let color;
+                                            if (state.data.value === 'lento') {
+                                                color = 'blue';
+                                            } else if (state.data.value === 'medio') {
+                                                color = 'black';
+                                            } else if (state.data.value === 'rapido') {
+                                                color = 'darkred';
+                                            } else {
+                                                color = 'inherit';  
+                                            }
+                                            return {
+                                                ...provided,
+                                                color
+                                            };
+                                        },
+                                        option: (provided, state) => ({
+                                            ...provided,
+                                            backgroundColor: state.isHovered ? 'lightgrey' :
+                                            state.isSelected ? (
+                                                state.data.value === 'lento' ? '#ADD8E6' :
+                                                state.data.value === 'medio' ? '#FFFF99' :
+                                                state.data.value === 'rapido' ? '#FFA07A' : null
+                                            ) : null,
+                                            color: state.isSelected ? (
+                                                state.data.value === 'lento' ? 'blue' :
+                                                state.data.value === 'medio' ? 'black' :
+                                                state.data.value === 'rapido' ? 'darkred' : null
                                             ) : null
                                         }),
                                         menu: (provided) => ({
