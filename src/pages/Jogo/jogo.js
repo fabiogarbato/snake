@@ -280,28 +280,28 @@ function Jogo() {
                     <Col className="d-flex align-items-center justify-content-center">
                         <Row className="justify-content-left">
                             <Col xs={12} sm={10} md={8} lg={6} className="text-center">
-                            <h2
-                                style={{
-                                color: difficultyLabel === 'Fácil' ? 'green' :
-                                difficultyLabel === 'Médio' ? 'orange' :
-                                difficultyLabel === 'Difícil' ? 'red' : 'inherit',
-                                fontFamily: 'Korataki, sans-serif',
-                                whiteSpace: 'nowrap'
-                                }}
-                            >
-                                Dificuldade: {difficultyLabel}
-                            </h2>
-                            <h2
-                                style={{
-                                color:  speedLabel === 'Lento' ? 'Blue' :
-                                speedLabel === 'Médio' ? 'orange' :
-                                speedLabel === 'Rápido' ? 'red' : 'inherit',
-                                fontFamily: 'Korataki, sans-serif',
-                                whiteSpace: 'nowrap'
-                                }}
-                            >
-                                Velocidade: {speedLabel}
-                            </h2>
+                                <h2
+                                    style={{
+                                    color: difficultyLabel === 'Fácil' ? 'green' :
+                                    difficultyLabel === 'Médio' ? 'orange' :
+                                    difficultyLabel === 'Difícil' ? 'red' : 'inherit',
+                                    fontFamily: 'Korataki, sans-serif',
+                                    whiteSpace: 'nowrap'
+                                    }}
+                                >
+                                    Dificuldade: {difficultyLabel}
+                                </h2>
+                                <h2
+                                    style={{
+                                    color:  speedLabel === 'Lento' ? 'Blue' :
+                                    speedLabel === 'Médio' ? 'orange' :
+                                    speedLabel === 'Rápido' ? 'red' : 'inherit',
+                                    fontFamily: 'Korataki, sans-serif',
+                                    whiteSpace: 'nowrap'
+                                    }}
+                                >
+                                    Velocidade: {speedLabel}
+                                </h2>
                             </Col>
                         </Row>
                     </Col>
